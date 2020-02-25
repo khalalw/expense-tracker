@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { GlobalContext } from '../context/GlobalState';
 
-export default function Transaction({ transaction: { text, amount } }) {
+export default function Transaction({ transaction: { text, amount, id } }) {
+  const { deleteTransaction } = useContext(GlobalContext);
   const sign = amount < 0 ? '-' : '+';
   return (
     <li className={amount < 0 ? 'minus' : 'plus'}>
@@ -10,7 +12,7 @@ export default function Transaction({ transaction: { text, amount } }) {
         {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
         {sign}${Math.abs(amount)}
       </span>
-      <button type="button" className="delete-btn">
+      <button type="button" className="delete-btn" onClick={() => deleteTransaction(id)}>
         x
       </button>
     </li>
@@ -24,6 +26,7 @@ Transaction.defaultProps = {
 Transaction.propTypes = {
   transaction: PropTypes.shape({
     text: PropTypes.string,
-    amount: PropTypes.number
+    amount: PropTypes.number,
+    id: PropTypes.number
   })
 };

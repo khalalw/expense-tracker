@@ -1,13 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { GlobalContext } from '../context/GlobalState';
 
 export default function AddTransaction() {
   const [text, setText] = useState('');
   const [amount, setAmount] = useState(0);
+  const { addTransaction } = useContext(GlobalContext);
+
+  const handleSubmit = event => {
+    event.preventDefault();
+
+    const newTransaction = {
+      // eslint-disable-next-line no-bitwise
+      id: ~~(Math.random() * 100000000),
+      amount: Number(amount),
+      text
+    };
+
+    addTransaction(newTransaction);
+  };
 
   return (
     <>
       <h3>Add new transaction</h3>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="form-control">
           <label htmlFor="text">
             Text
@@ -32,7 +47,7 @@ export default function AddTransaction() {
             />
           </label>
         </div>
-        <button type="button" className="btn">
+        <button type="submit" className="btn">
           Add transaction
         </button>
       </form>
